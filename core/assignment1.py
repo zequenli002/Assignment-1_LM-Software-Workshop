@@ -6,21 +6,22 @@ def clean_up():
     cleaned is used store the wanted characters
     :return: cleaned
     """
-    f = open("../resource/text_to_clean.txt", "r", encoding="UTF-8")
-    sf = open("../resource/student_names.txt", "w", encoding="UTF-8")
-    text = f.read()
+    with open("../resource/text_to_clean.txt", "r", encoding="UTF-8") as f:
+        text = f.read()
+
     cleaned = ""
-    # lower case char, upper case char, blank, full stop - valid characters
-    # insert code here to clean the file as per question 1
-    f.close()
-    for letter in text:
-        if 65 <= ord(letter) <= 90 or 97 <= ord(letter) <= 122 or ord(letter) == 32 or ord(
-                letter) == 46 or letter == "\n":
-            sf.write(letter)
-            cleaned += letter
-    sf.close()
+    with open("../resource/student_names.txt", "w", encoding="UTF-8") as sf:
+        # lower case char, upper case char, blank, full stop - valid characters
+        # insert code here to clean the file as per question 1
+        for letter in text:
+            if 65 <= ord(letter) <= 90 or 97 <= ord(letter) <= 122 or ord(letter) == 32 or ord(
+                    letter) == 46 or letter == "\n":
+                sf.write(letter)
+                cleaned += letter
+
     if cleaned[-1] != "\n":
         cleaned += "\n"
+
     return cleaned
 
 
@@ -30,12 +31,10 @@ def build_id():
     id_list is the list return with the id's created from the name / surname of each student
     :return: id_list
     """
-    f = open("../resource/student_names.txt", "r", encoding="UTF-8")
     id_list = []
     # insert code here to create the id's as per question 2
-    f = open("../resource/student_names.txt", "r", encoding="UTF-8")
-    text = f.read().split("\n")
-    f.close()
+    with open("../resource/student_names.txt", "r", encoding="UTF-8") as f:
+        text = f.read().split("\n")
     for name in text:
         str1 = ''
         for word in name:
@@ -84,9 +83,8 @@ def validate_password(password):
         illegal_password.append("NOT MIXED CASE")
     if password[0].isdigit():
         illegal_password.append("LEADING DIGIT")
-    f = open("../resource/password.txt", "r", encoding="UTF-8")
-    text = f.read()
-    f.close()
+    with open("../resource/password.txt", "r", encoding="UTF-8") as f:
+        text = f.read()
     for word in text.split():
         if password == word:
             illegal_password.append("CANNOT MAKE USE OF THIS PASSWORD")
@@ -127,14 +125,14 @@ def create_unique(id_list):
         final_list.append(rep_id)
         # current_length += 1
         # times = current_length
-    f = open("../resource/unique_ids.txt", "w", encoding="UTF-8")
-    for unique_id in final_list:
-        f.write(unique_id + '\n')
-    f.close()
-    f = open("../resource/create_emails.txt", "w", encoding="UTF-8")
-    for unique_id in final_list:
-        f.write(unique_id + '@student.bham.ac.uk\n')
-    f.close()
+    with open("../resource/unique_ids.txt", "w", encoding="UTF-8") as f:
+        for unique_id in final_list:
+            f.write(unique_id + '\n')
+
+    with open("../resource/create_emails.txt", "w", encoding="UTF-8") as f:
+        for unique_id in final_list:
+            f.write(unique_id + '@student.bham.ac.uk\n')
+
     return final_list
 
 
@@ -144,11 +142,11 @@ def create_short_address():
     split the address up so that only the first part and the postcode make up the shorter address
     :return: split_addrs is returned where the address1, postcode make up the list - this list is used for validate_pcode()
     """
-    f = open("../resource/addresses.txt", "r", encoding="UTF-8")
-    text = f.read().split("\n")
+    with open("../resource/addresses.txt", "r", encoding="UTF-8") as f:
+        text = f.read().split("\n")
+
     split_addrs = []
     # insert code here to create the shorter address
-    f.close()
     filter_text = []
     count = 0
     for element in text:
@@ -205,8 +203,9 @@ def ids_addrs(short_addr):
     :param short_addr: passed in from main() - generated from create_short_address()
     :return: combo is the key / value pair, i.e. unique id and the short addr for each student
     """
-    f = open("../resource/unique_ids.txt", "r", encoding="UTF-8")
-    ids = f.read()
+    with open("../resource/unique_ids.txt", "r", encoding="UTF-8") as f:
+        ids = f.read()
+
     combo = {}
     # insert code here to create combo
     count = 0
