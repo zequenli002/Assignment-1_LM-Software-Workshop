@@ -6,8 +6,8 @@ def clean_up():
         cleaned is used store the wanted characters
         :return: cleaned
         """
-    f = open("text_to_clean.txt", "r", encoding="UTF-8")
-    sf = open("student_names.txt", "w", encoding="UTF-8")
+    f = open("../resource/text_to_clean.txt", "r", encoding="UTF-8")
+    sf = open("../resource/student_names.txt", "w", encoding="UTF-8")
     text = f.read()
     cleaned = ""
     # lower case char, upper case char, blank, full stop - valid characters
@@ -28,10 +28,10 @@ def build_id():
     id_list is the list return with the id's created from the name / surname of each student
     :return: id_list
     """
-    f = open("student_names.txt", "r", encoding="UTF-8")
+    f = open("../resource/student_names.txt", "r", encoding="UTF-8")
     id_list = []
     # insert code here to create the id's as per question 2
-    f = open("student_names.txt", "r", encoding="UTF-8")
+    f = open("../resource/student_names.txt", "r", encoding="UTF-8")
     text = f.read().split("\n")
     f.close()
     for name in text:
@@ -82,7 +82,7 @@ def validate_password(password):
         illegal_password.append("NOT MIXED CASE")
     if password[0].isdigit():
         illegal_password.append("LEADING DIGIT")
-    f = open("password.txt", "r", encoding="UTF-8")
+    f = open("../resource/password.txt", "r", encoding="UTF-8")
     text = f.read()
     f.close()
     for word in text.split():
@@ -123,11 +123,11 @@ def create_unique(id_list):
         final_list.append(rep_id)
         # current_length += 1
         # times = current_length
-    f = open("unique_ids.txt", "w", encoding="UTF-8")
+    f = open("../resource/unique_ids.txt", "w", encoding="UTF-8")
     for unique_id in final_list:
         f.write(unique_id + '\n')
     f.close()
-    f = open("create_emails.txt", "w", encoding="UTF-8")
+    f = open("../resource/create_emails.txt", "w", encoding="UTF-8")
     for unique_id in final_list:
         f.write(unique_id + '@student.bham.ac.uk\n')
     f.close()
@@ -138,7 +138,7 @@ def create_short_address():
     split the address up so that only the first part and the postcode make up the shorter address
     :return: split_addrs is returned where the address1, postcode make up the list - this list is used for validate_pcode()
     """
-    f = open("addresses.txt", "r", encoding="UTF-8")
+    f = open("../resource/addresses.txt", "r", encoding="UTF-8")
     text = f.read().split("\n")
     split_addrs = []
     # insert code here to create the shorter address
@@ -197,7 +197,7 @@ def ids_addrs(short_addr):
     :param short_addr: passed in from main() - generated from create_short_address()
     :return: combo is the key / value pair, i.e. unique id and the short addr for each student
     """
-    f = open("unique_ids.txt", "r", encoding="UTF-8")
+    f = open("../resource/unique_ids.txt", "r", encoding="UTF-8")
     ids = f.read()
     combo = {}
     # insert code here to create combo
@@ -241,6 +241,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
