@@ -1,4 +1,4 @@
-import assignment1
+from core import assignment1
 
 
 class TestClass:

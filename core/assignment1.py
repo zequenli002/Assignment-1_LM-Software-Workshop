@@ -1,40 +1,58 @@
-def clean_up():
+def load_text_from_file(file_path: str, split_by=None):
     """
-        f refers to text_to_clean.txt
-        sf refers to student_names.txt
-        use text to read in the appropriate file
-        cleaned is used store the wanted characters
-        :return: cleaned
-        """
-    f = open("text_to_clean.txt", "r", encoding="UTF-8")
-    sf = open("student_names.txt", "w", encoding="UTF-8")
-    text = f.read()
+    Load text content from file
+    :param file_path:
+    :param split_by:
+    :return: string or list of string
+    """
+    with open(file_path, "r", encoding="UTF-8") as f:
+        text = f.read()
+
+    if split_by:
+        text = text.split(split_by)
+
+    return text
+
+
+def clean_up(text_to_clean_path, student_names_path):
+    """
+    f refers to text_to_clean.txt
+    sf refers to student_names.txt
+    use text to read in the appropriate file
+    cleaned is used store the wanted characters
+    :param text_to_clean_path: path to text_to_clean.txt
+    :param student_names_path: path to student_names.txt
+    :return: cleaned
+    """
+    text_to_be_cleaned = load_text_from_file(text_to_clean_path)
+
     cleaned = ""
-    # lower case char, upper case char, blank, full stop - valid characters
-    # insert code here to clean the file as per question 1
-    f.close()
-    for letter in text:
-        if 65 <= ord(letter) <= 90 or 97 <= ord(letter) <= 122 or ord(letter) == 32 or ord(letter) == 46 or letter == "\n":
-            sf.write(letter)
-            cleaned += letter
-    sf.close()
+    with open(student_names_path, "w", encoding="UTF-8") as sf:
+        # lower case char, upper case char, blank, full stop - valid characters
+        # insert code here to clean the file as per question 1
+        for letter in text_to_be_cleaned:
+            if 65 <= ord(letter) <= 90 or 97 <= ord(letter) <= 122 or ord(letter) == 32 or ord(
+                    letter) == 46 or letter == "\n":
+                sf.write(letter)
+                cleaned += letter
+
     if cleaned[-1] != "\n":
         cleaned += "\n"
+
     return cleaned
 
-def build_id():
+
+def build_id(student_name_path):
     """
     f refers to the student_names.txt file created in clean_up()
     id_list is the list return with the id's created from the name / surname of each student
+    :param student_name_path: path to student_name.txt
     :return: id_list
     """
-    f = open("student_names.txt", "r", encoding="UTF-8")
     id_list = []
     # insert code here to create the id's as per question 2
-    f = open("student_names.txt", "r", encoding="UTF-8")
-    text = f.read().split("\n")
-    f.close()
-    for name in text:
+    student_name_list = load_text_from_file(student_name_path, "\n")
+    for name in student_name_list:
         str1 = ''
         for word in name:
             for letter in word:
@@ -50,16 +68,17 @@ def build_id():
     return id_list
 
 
-def validate_password(password):
+def validate_password(password, password_path):
     """
     illegal_password is the list that is built up showing the invalid parts of the password
     Validate the password to verify if it is legal or not as per Question 3
     There is a password.txt file given to you to verify invalid passwords
     :param password: make use of the password found in main(), the test file will also have additional passwords to test
+    :param password_path: path to password.txt
     :return: illegal_password
     """
     illegal_password = []
-    #insert code here to validate all the conditions of the password as per question 3
+    # insert code here to validate all the conditions of the password as per question 3
     if len(password) < 8:
         illegal_password.append("TOO SHORT")
     if len(password) > 12:
@@ -82,19 +101,22 @@ def validate_password(password):
         illegal_password.append("NOT MIXED CASE")
     if password[0].isdigit():
         illegal_password.append("LEADING DIGIT")
-    f = open("password.txt", "r", encoding="UTF-8")
-    text = f.read()
-    f.close()
-    for word in text.split():
+    password_list = load_text_from_file(password_path, " ")
+    for word in password_list:
         if password == word:
             illegal_password.append("CANNOT MAKE USE OF THIS PASSWORD")
     return illegal_password
-def create_unique(id_list):
+
+
+def create_unique(id_list, unique_ids_path, create_emails_path, base_email_address="@student.bham.ac.uk"):
     """
     Adhere to the instructions in question 4 to determine a unique id for each student
     Write the content of the unique ids to the file unique_ids.txt - open / close the file correctly
     Write the content of the emails created to the file create_emails.txt - - open / close the file correctly
     :param id_list: the id_list that was returned in build_id() is used here to create the unique ids
+    :param unique_ids_path: path to unique_ids.txt
+    :param create_emails_path: path to create_emails.txt
+    :param base_email_address:
     :return: final_list is returned and this list contains all of the unique student ids
     """
     final_list = []
@@ -123,34 +145,35 @@ def create_unique(id_list):
         final_list.append(rep_id)
         # current_length += 1
         # times = current_length
-    f = open("unique_ids.txt", "w", encoding="UTF-8")
-    for unique_id in final_list:
-        f.write(unique_id + '\n')
-    f.close()
-    f = open("create_emails.txt", "w", encoding="UTF-8")
-    for unique_id in final_list:
-        f.write(unique_id + '@student.bham.ac.uk\n')
-    f.close()
+    with open(unique_ids_path, "w", encoding="UTF-8") as f:
+        for unique_id in final_list:
+            f.write(unique_id + '\n')
+
+    with open(create_emails_path, "w", encoding="UTF-8") as f:
+        for unique_id in final_list:
+            f.write(unique_id + f'{base_email_address}\n')
+
     return final_list
-def create_short_address():
+
+
+def create_short_address(addresses_path):
     """
     Open the addresses.txt file correctly where f = the file to be opened
     split the address up so that only the first part and the postcode make up the shorter address
+    :param addresses_path: addresses.txt path
     :return: split_addrs is returned where the address1, postcode make up the list - this list is used for validate_pcode()
     """
-    f = open("addresses.txt", "r", encoding="UTF-8")
-    text = f.read().split("\n")
+    address_list = load_text_from_file(addresses_path, "\n")
     split_addrs = []
     # insert code here to create the shorter address
-    f.close()
     filter_text = []
-    count = 0
-    for element in text:
+    for element in address_list:
         if element != '':
             filter_text.append(element)
     for address in filter_text:
         split_addrs.append([address.split(", ")[0], address.split(", ")[-1]])
     return split_addrs
+
 
 def validate_pcode(split_addrs):
     """
@@ -191,23 +214,32 @@ def validate_pcode(split_addrs):
         validate_pcode.append(validate_3rd)
     return validate_pcode
 
-def ids_addrs(short_addr):
+
+def ids_addrs(short_addr, unique_ids_path):
     """
     This function reads in the unique_ids.txt file as f and creates a dictionary based on the id and the short address
     :param short_addr: passed in from main() - generated from create_short_address()
+    :param unique_ids_path: path to unique_ids.txt
     :return: combo is the key / value pair, i.e. unique id and the short addr for each student
     """
-    f = open("unique_ids.txt", "r", encoding="UTF-8")
-    ids = f.read()
+    id_list = load_text_from_file(unique_ids_path, " ")
     combo = {}
     # insert code here to create combo
     count = 0
-    for unique_id in ids.split():
+    for unique_id in id_list:
         combo[f"{unique_id}"] = f"{short_addr[count]}"
         count += 1
     return combo
 
+
 def main():
+    base_path = "/media/xunjie/SilverBullet/Projects/Assignment-1_LM-Software-Workshop/resource/"
+    text_to_clean_path = base_path + "text_to_clean.txt"
+    student_names_path = base_path + "student_names.txt"
+    password_path = base_path + "password.txt"
+    unique_ids_path = base_path + "unique_ids.txt"
+    create_emails_path = base_path + "create_emails.txt"
+    addresses_path = base_path + "addresses.txt"
     id_list = []
     while True:
         print("\nStudent File Menu:")
@@ -221,26 +253,24 @@ def main():
         print("8. Exit")
         choice = input("Enter your choice: ")
         if choice == '1':
-            clean_up()
+            clean_up(text_to_clean_path, student_names_path)
         elif choice == '2':
-            id_list = build_id()
+            id_list = build_id(student_names_path)
         elif choice == '3':
-            validate_password("1abcDE%")
+            validate_password("1abcDE%", password_path)
         elif choice == '4':
-            create_unique(id_list)
+            create_unique(id_list, unique_ids_path, create_emails_path)
         elif choice == '5':
-            short_addr = create_short_address()
+            short_addr = create_short_address(addresses_path)
         elif choice == '6':
             validate_pcode(short_addr)
         elif choice == '7':
-            ids_addrs(short_addr)
+            ids_addrs(short_addr, unique_ids_path)
         elif choice == '8':
             break
         else:
             print("Invalid choice! Please choose again.")
 
+
 if __name__ == "__main__":
     main()
-
-
-
