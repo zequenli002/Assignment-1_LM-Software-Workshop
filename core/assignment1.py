@@ -1,15 +1,15 @@
-def load_text_from_file(file_path: str, read_by_line=False):
+def load_text_from_file(file_path: str, split_by=None):
     """
     Load text content from file
     :param file_path:
-    :param read_by_line:
+    :param split_by:
     :return: string or list of string
     """
     with open(file_path, "r", encoding="UTF-8") as f:
-        if read_by_line:
-            text = f.readlines()
-        else:
-            text = f.read()
+        text = f.read()
+
+    if split_by:
+        text = text.split(split_by)
 
     return text
 
@@ -51,7 +51,7 @@ def build_id(student_name_path):
     """
     id_list = []
     # insert code here to create the id's as per question 2
-    student_name_list = load_text_from_file(student_name_path, True)
+    student_name_list = load_text_from_file(student_name_path, "\n")
     for name in student_name_list:
         str1 = ''
         for word in name:
@@ -101,8 +101,8 @@ def validate_password(password, password_path):
         illegal_password.append("NOT MIXED CASE")
     if password[0].isdigit():
         illegal_password.append("LEADING DIGIT")
-    password_text = load_text_from_file(password_path)
-    for word in password_text.split():
+    password_list = load_text_from_file(password_path, " ")
+    for word in password_list:
         if password == word:
             illegal_password.append("CANNOT MAKE USE OF THIS PASSWORD")
     return illegal_password
@@ -163,7 +163,7 @@ def create_short_address(addresses_path):
     :param addresses_path: addresses.txt path
     :return: split_addrs is returned where the address1, postcode make up the list - this list is used for validate_pcode()
     """
-    address_list = load_text_from_file(addresses_path, True)
+    address_list = load_text_from_file(addresses_path, "\n")
     split_addrs = []
     # insert code here to create the shorter address
     filter_text = []
@@ -222,11 +222,11 @@ def ids_addrs(short_addr, unique_ids_path):
     :param unique_ids_path: path to unique_ids.txt
     :return: combo is the key / value pair, i.e. unique id and the short addr for each student
     """
-    id_text = load_text_from_file(unique_ids_path)
+    id_list = load_text_from_file(unique_ids_path, " ")
     combo = {}
     # insert code here to create combo
     count = 0
-    for unique_id in id_text.split():
+    for unique_id in id_list:
         combo[f"{unique_id}"] = f"{short_addr[count]}"
         count += 1
     return combo
