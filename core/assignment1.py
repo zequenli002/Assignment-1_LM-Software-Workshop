@@ -1,3 +1,19 @@
+def load_text_from_file(file_path: str, read_by_line=False):
+    """
+    Load text content from file
+    :param file_path:
+    :param read_by_line:
+    :return: string or list of string
+    """
+    with open(file_path, "r", encoding="UTF-8") as f:
+        if read_by_line:
+            text = f.readlines()
+        else:
+            text = f.read()
+
+    return text
+
+
 def clean_up(text_to_clean_path, student_names_path):
     """
     f refers to text_to_clean.txt
@@ -8,14 +24,13 @@ def clean_up(text_to_clean_path, student_names_path):
     :param student_names_path: path to student_names.txt
     :return: cleaned
     """
-    with open(text_to_clean_path, "r", encoding="UTF-8") as f:
-        text = f.read()
+    text_to_be_cleaned = load_text_from_file(text_to_clean_path)
 
     cleaned = ""
     with open(student_names_path, "w", encoding="UTF-8") as sf:
         # lower case char, upper case char, blank, full stop - valid characters
         # insert code here to clean the file as per question 1
-        for letter in text:
+        for letter in text_to_be_cleaned:
             if 65 <= ord(letter) <= 90 or 97 <= ord(letter) <= 122 or ord(letter) == 32 or ord(
                     letter) == 46 or letter == "\n":
                 sf.write(letter)
@@ -36,9 +51,8 @@ def build_id(student_name_path):
     """
     id_list = []
     # insert code here to create the id's as per question 2
-    with open(student_name_path, "r", encoding="UTF-8") as f:
-        text = f.read().split("\n")
-    for name in text:
+    student_name_list = load_text_from_file(student_name_path, True)
+    for name in student_name_list:
         str1 = ''
         for word in name:
             for letter in word:
@@ -87,9 +101,8 @@ def validate_password(password, password_path):
         illegal_password.append("NOT MIXED CASE")
     if password[0].isdigit():
         illegal_password.append("LEADING DIGIT")
-    with open(password_path, "r", encoding="UTF-8") as f:
-        text = f.read()
-    for word in text.split():
+    password_text = load_text_from_file(password_path)
+    for word in password_text.split():
         if password == word:
             illegal_password.append("CANNOT MAKE USE OF THIS PASSWORD")
     return illegal_password
@@ -150,14 +163,11 @@ def create_short_address(addresses_path):
     :param addresses_path: addresses.txt path
     :return: split_addrs is returned where the address1, postcode make up the list - this list is used for validate_pcode()
     """
-    with open(addresses_path, "r", encoding="UTF-8") as f:
-        text = f.read().split("\n")
-
+    address_list = load_text_from_file(addresses_path, True)
     split_addrs = []
     # insert code here to create the shorter address
     filter_text = []
-    count = 0
-    for element in text:
+    for element in address_list:
         if element != '':
             filter_text.append(element)
     for address in filter_text:
@@ -212,13 +222,11 @@ def ids_addrs(short_addr, unique_ids_path):
     :param unique_ids_path: path to unique_ids.txt
     :return: combo is the key / value pair, i.e. unique id and the short addr for each student
     """
-    with open(unique_ids_path, "r", encoding="UTF-8") as f:
-        ids = f.read()
-
+    id_text = load_text_from_file(unique_ids_path)
     combo = {}
     # insert code here to create combo
     count = 0
-    for unique_id in ids.split():
+    for unique_id in id_text.split():
         combo[f"{unique_id}"] = f"{short_addr[count]}"
         count += 1
     return combo
