@@ -1,11 +1,11 @@
 def clean_up():
     """
-        f refers to text_to_clean.txt
-        sf refers to student_names.txt
-        use text to read in the appropriate file
-        cleaned is used store the wanted characters
-        :return: cleaned
-        """
+    f refers to text_to_clean.txt
+    sf refers to student_names.txt
+    use text to read in the appropriate file
+    cleaned is used store the wanted characters
+    :return: cleaned
+    """
     f = open("../resource/text_to_clean.txt", "r", encoding="UTF-8")
     sf = open("../resource/student_names.txt", "w", encoding="UTF-8")
     text = f.read()
@@ -14,13 +14,15 @@ def clean_up():
     # insert code here to clean the file as per question 1
     f.close()
     for letter in text:
-        if 65 <= ord(letter) <= 90 or 97 <= ord(letter) <= 122 or ord(letter) == 32 or ord(letter) == 46 or letter == "\n":
+        if 65 <= ord(letter) <= 90 or 97 <= ord(letter) <= 122 or ord(letter) == 32 or ord(
+                letter) == 46 or letter == "\n":
             sf.write(letter)
             cleaned += letter
     sf.close()
     if cleaned[-1] != "\n":
         cleaned += "\n"
     return cleaned
+
 
 def build_id():
     """
@@ -59,7 +61,7 @@ def validate_password(password):
     :return: illegal_password
     """
     illegal_password = []
-    #insert code here to validate all the conditions of the password as per question 3
+    # insert code here to validate all the conditions of the password as per question 3
     if len(password) < 8:
         illegal_password.append("TOO SHORT")
     if len(password) > 12:
@@ -89,6 +91,8 @@ def validate_password(password):
         if password == word:
             illegal_password.append("CANNOT MAKE USE OF THIS PASSWORD")
     return illegal_password
+
+
 def create_unique(id_list):
     """
     Adhere to the instructions in question 4 to determine a unique id for each student
@@ -132,6 +136,8 @@ def create_unique(id_list):
         f.write(unique_id + '@student.bham.ac.uk\n')
     f.close()
     return final_list
+
+
 def create_short_address():
     """
     Open the addresses.txt file correctly where f = the file to be opened
@@ -151,6 +157,7 @@ def create_short_address():
     for address in filter_text:
         split_addrs.append([address.split(", ")[0], address.split(", ")[-1]])
     return split_addrs
+
 
 def validate_pcode(split_addrs):
     """
@@ -191,6 +198,7 @@ def validate_pcode(split_addrs):
         validate_pcode.append(validate_3rd)
     return validate_pcode
 
+
 def ids_addrs(short_addr):
     """
     This function reads in the unique_ids.txt file as f and creates a dictionary based on the id and the short address
@@ -206,6 +214,7 @@ def ids_addrs(short_addr):
         combo[f"{unique_id}"] = f"{short_addr[count]}"
         count += 1
     return combo
+
 
 def main():
     id_list = []
@@ -238,6 +247,7 @@ def main():
             break
         else:
             print("Invalid choice! Please choose again.")
+
 
 if __name__ == "__main__":
     main()
